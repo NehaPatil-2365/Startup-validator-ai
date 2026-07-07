@@ -81,6 +81,7 @@ export default function ReportPage({ params }: ReportPageProps) {
       // Fetch completed report from DB
       fetchReport();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   useEffect(() => {

@@ -65,6 +65,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     fetchReports();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleDelete = async (id: string, e: React.MouseEvent) => {
