@@ -3,7 +3,27 @@ import Groq from 'groq-sdk';
 
 export const dynamic = 'force-dynamic';
 
-const groqApiKey = process.env.GROQ_API_KEY;
+import fs from 'fs';
+
+let groqApiKey = process.env.GROQ_API_KEY;
+
+// Fail-safe absolute path loader for local dev server
+if (!groqApiKey) {
+  try {
+    const envPath = '/home/yash/Projects/bahin ka startup/.env.local';
+    if (fs.existsSync(envPath)) {
+      const content = fs.readFileSync(envPath, 'utf8');
+      const match = content.match(/GROQ_API_KEY="([^"]+)"/) || content.match(/GROQ_API_KEY=([^\s\n]+)/);
+      if (match) {
+        groqApiKey = match[1];
+        console.log("Loaded GROQ_API_KEY from .env.local via absolute path fail-safe in Chat Route.");
+      }
+    }
+  } catch (e) {
+    console.error("Chat Route fail-safe env loader error:", e);
+  }
+}
+
 const groq = groqApiKey ? new Groq({ apiKey: groqApiKey }) : null;
 
 export async function POST(req: NextRequest) {
